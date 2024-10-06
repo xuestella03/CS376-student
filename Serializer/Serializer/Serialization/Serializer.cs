@@ -238,7 +238,6 @@ namespace Assets.Serialization
                 return;
             }
             var fields = Utilities.SerializedFields(o);
-            //var fieldList = "";
 
             WriteBracketedExpression(
                 "{ ",
@@ -251,10 +250,7 @@ namespace Assets.Serialization
                     }
                 },
                 " }");
-            //foreach (var field in fields)
-            //{
-            //    fieldList += WriteField(field.Key, field.Value, false);
-            //}
+            
         }
     }
 }
