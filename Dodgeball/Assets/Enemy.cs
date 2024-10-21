@@ -19,17 +19,19 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// How fast the orbs it fires should move
     /// </summary>
-    public float OrbVelocity = 10;
+    public float OrbVelocity = 5;
 
     /// <summary>
     /// How heavy the orbs it fires should be
     /// </summary>
-    public float OrbMass = .5f;
+    public float OrbMass = 0.5f;
 
     /// <summary>
     /// Period the enemy should wait between shots
     /// </summary>
     public float CoolDownTime = 1;
+
+    private float shootTime;
 
     /// <summary>
     /// Prefab for the orb it fires
@@ -66,6 +68,7 @@ public class Enemy : MonoBehaviour
     {
         player = FindObjectOfType<Player>().transform;
         rigidBody = GetComponent<Rigidbody2D>();
+        shootTime = Time.time + 3;
     }
 
     /// <summary>
@@ -75,6 +78,11 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         // TODO
+        if (Time.time > shootTime)
+        {
+            Fire();
+            shootTime += CoolDownTime;
+        }
     }
 
     /// <summary>
@@ -84,6 +92,16 @@ public class Enemy : MonoBehaviour
     private void Fire()
     {
         // TODO
+        var orb = Instantiate(OrbPrefab, transform);
+        orb.transform.position += new Vector3(HeadingToPlayer.normalized.x, HeadingToPlayer.normalized.y, 0);
+        
+        // I wanted to increase the size of the orbs
+        orb.transform.localScale *= 1.5f;
+
+        var orb2D = orb.GetComponent<Rigidbody2D>();
+        orb2D.mass = OrbMass;
+        orb2D.AddForce(HeadingToPlayer * OrbVelocity, ForceMode2D.Impulse);
+
     }
 
     /// <summary>
