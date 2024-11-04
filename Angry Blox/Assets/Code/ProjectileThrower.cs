@@ -71,7 +71,16 @@ public class ProjectileThrower : MonoBehaviour {
     /// <returns></returns>
     bool WaitingForPhysicsToSettle()
     {
-        return true;  // Replace this
+        Rigidbody2D[] bodies = FindObjectsOfType<Rigidbody2D>(false);
+        foreach (Rigidbody2D rb in bodies)
+        {
+            if (rb.IsAwake() && !IsOffScreen(rb.gameObject))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -86,6 +95,14 @@ public class ProjectileThrower : MonoBehaviour {
     internal void Update()
     {
         FireControl();
+        if (!WaitingForPhysicsToSettle() && firingState >= FiringState.Firing)
+        {
+            ResetForFiring();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        { 
+            ResetForFiring(); 
+        }
     }
 
     /// <summary>
